@@ -29,16 +29,13 @@ const OnboardingModal = () => {
     const section = onboardingState.sections[currentSectionKey];
 
     // Skip the modal if we don't have an onboarding section matchin the current page
-    // && if the previous page section is the same as the current one
+    // or if the previous page section is the same as the current one
+    // or if user change page but we are still on the same onboarding section and the pathname is different
+    // example /collectionType/api::country.country !== /collectionType/api::category.category
     const shouldSkipModal =
       !section ||
-      (previousSection && previousSection.name === section.name && previousPathname !== pathname) ||
-      section.done;
-
-    // const shouldSkipModal =
-    // !section
-    // || (previousSection && previousSection.name === section.name && previousPathname !== pathname)
-    // || section.done
+      section.done ||
+      (previousSection && previousSection.name === section.name && previousPathname !== pathname);
 
     // We need to keep the previous page after testing if we are still on the same section
     // We need to keep the previous page before rendering or skipping the modal
@@ -60,7 +57,10 @@ const OnboardingModal = () => {
 
     setSectionKey(currentSectionKey);
     setIsVisible(true);
-  }, [pathname, onboardingState, previousSection, previousPathname]);
+
+    // TO FIX LATER MISSING DEPENDENCIES
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, onboardingState]);
 
   // useEffect(() => {console.log('yooooooolooooooooo')}, [onboardingState])
 

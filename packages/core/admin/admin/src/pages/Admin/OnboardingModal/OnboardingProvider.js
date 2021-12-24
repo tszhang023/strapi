@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import OnboardingContext from './OnboardingContext';
 
-// si user s'en va et repasse par la homepage = reactiver 1er step active
-// si user s'en va, repasse pas par homepage mais revient sur CM
-
 const OnboardingProvider = ({ children }) => {
   const initialState = {
     sections: {
@@ -17,7 +14,6 @@ const OnboardingProvider = ({ children }) => {
           1: {
             done: false,
             title: 'init onboarding',
-            selfValidate: true,
           },
           2: {
             done: false,

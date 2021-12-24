@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useReducer, useContext } from 'react';
 import { cloneDeep, get, isEmpty, isEqual, set } from 'lodash';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
@@ -14,6 +14,7 @@ import {
 import { getTrad, removeKeyInObject } from '../../utils';
 import reducer, { initialState } from './reducer';
 import { cleanData, createYupSchema, getYupInnerErrors } from './utils';
+import OnboardingContext from '../../../pages/Admin/OnboardingModal/OnboardingContext';
 
 const EditViewDataManagerProvider = ({
   allLayoutData,
@@ -42,6 +43,7 @@ const EditViewDataManagerProvider = ({
   const { formErrors, initialData, modifiedData, modifiedDZName, shouldCheckErrors } = reducerState;
   const toggleNotification = useNotification();
   const { lockApp, unlockApp } = useOverlayBlocker();
+  const { setStepAsComplete } = useContext(OnboardingContext);
 
   const currentContentTypeLayout = get(allLayoutData, ['contentType'], {});
 
@@ -301,6 +303,8 @@ const EditViewDataManagerProvider = ({
         } else {
           onPut(formData, trackerProperty);
         }
+
+        setStepAsComplete('/content-manager', '1');
       } catch (err) {
         console.log('ValidationError');
         console.log(err);
@@ -330,6 +334,7 @@ const EditViewDataManagerProvider = ({
       toggleNotification,
       trackerProperty,
       yupSchema,
+      setStepAsComplete,
     ]
   );
 
