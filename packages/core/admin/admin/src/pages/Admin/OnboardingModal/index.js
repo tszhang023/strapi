@@ -15,7 +15,6 @@ const OnboardingModal = () => {
   const [currentStep, setCurrentStep] = useState(null);
   const [stepKey, setStepKey] = useState(null);
   const [sectionKey, setSectionKey] = useState(null);
-  const [previousSection, setPreviousSection] = useState(null);
   const [previousPathname, setPreviousPathname] = useState(null);
   const { onboardingState, setStepAsComplete } = useContext(OnboardingContext);
   const { pathname } = useLocation();
@@ -35,11 +34,11 @@ const OnboardingModal = () => {
     const shouldSkipModal =
       !section ||
       section.done ||
-      (previousSection && previousSection.name === section.name && previousPathname !== pathname);
+      (currentSectionKey === sectionKey && previousPathname !== pathname);
 
     // We need to keep the previous page after testing if we are still on the same section
     // We need to keep the previous page before rendering or skipping the modal
-    setPreviousSection(section);
+    setSectionKey(currentSectionKey);
     setPreviousPathname(pathname);
 
     if (shouldSkipModal) {
@@ -55,7 +54,6 @@ const OnboardingModal = () => {
     setCurrentStep(step);
     setStepKey(currentStepKey);
 
-    setSectionKey(currentSectionKey);
     setIsVisible(true);
 
     // TO FIX LATER MISSING DEPENDENCIES

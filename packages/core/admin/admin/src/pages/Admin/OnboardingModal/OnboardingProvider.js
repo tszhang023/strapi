@@ -7,7 +7,6 @@ const OnboardingProvider = ({ children }) => {
   const initialState = {
     sections: {
       '/content-manager': {
-        name: 'content-manager',
         pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
         done: false,
         steps: {
@@ -55,3 +54,24 @@ OnboardingProvider.propTypes = {
 };
 
 export default OnboardingProvider;
+
+// const initialState = {
+//   sections: {
+//     '/content-manager': {
+//       name: 'content-manager',
+//       pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
+//       done: false,
+//       steps: {
+//         1: {
+//           done: false,
+//           title: 'init onboarding',
+//         },
+//         2: {
+//           done: false,
+//           title: 'success onboarding',
+//           selfValidate: true,
+//         },
+//       },
+//     },
+//   },
+// };
