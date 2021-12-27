@@ -11,9 +11,9 @@ import { Button } from '@strapi/design-system/Button';
 import OnboardingContext from './OnboardingContext';
 
 const shouldSkipModal = ({ section, step }) => {
-  if (!step || step.done || !section || section.done) {
-    return true
-  };
+  if (!step || step.done || !section || section.done || step.closed) {
+    return true;
+  }
 
   return false;
 };
@@ -45,7 +45,7 @@ const OnboardingModal = () => {
   const [currentStep, setCurrentStep] = useState(null);
   const [stepKey, setStepKey] = useState(null);
   const [sectionKey, setSectionKey] = useState(null);
-  const { onboardingState, setStepAsComplete } = useContext(OnboardingContext);
+  const { onboardingState, setStepAsComplete, setStepAsClosed } = useContext(OnboardingContext);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const OnboardingModal = () => {
     // Test BEFORE updating state
     const skip = shouldSkipModal({
       section,
-      step
+      step,
     });
     setSectionKey(currentSectionKey);
 
@@ -83,25 +83,27 @@ const OnboardingModal = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, onboardingState]);
 
-  const handleEndActionClick = () => {
+  const handleCloseModal = () => {
     if (currentStep && currentStep.selfValidate) {
       setStepAsComplete(sectionKey, stepKey);
     } else {
-      setIsVisible(prev => !prev);
+      setIsVisible(false);
     }
+
+    setStepAsClosed(sectionKey, stepKey);
   };
 
   return (
     <>
       {isVisible && (
-        <ModalLayout onClose={() => setIsVisible(prev => !prev)} labelledBy="title">
+        <ModalLayout onClose={handleCloseModal} labelledBy="title">
           <ModalHeader>
             <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
               {currentStep?.title}
             </Typography>
           </ModalHeader>
           <ModalBody>hello world</ModalBody>
-          <ModalFooter endActions={<Button onClick={handleEndActionClick}>click me</Button>} />
+          <ModalFooter endActions={<Button onClick={handleCloseModal}>click me</Button>} />
         </ModalLayout>
       )}
     </>

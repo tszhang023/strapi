@@ -13,22 +13,46 @@ import OnboardingContext from './OnboardingContext';
 const OnboardingProvider = ({ children }) => {
   const initialState = {
     sections: {
-      'content-manager': {
+      'content-type-builder': {
         number: 1,
+        page: 'plugins/content-type-builder',
+        done: false,
+        steps: {
+          'create-content-type': {
+            closed: false,
+            done: false,
+            number: 1,
+            pageMatcher: /\/plugins\/content-type-builder\/[^/]+\/[^/]+\/?$/,
+            selfValidate: false,
+            title: 'init CTB onboarding',
+          },
+          'create-content-type-success': {
+            closed: false,
+            done: false,
+            number: 2,
+            pageMatcher: /\/plugins\/content-type-builder\/.*/,
+            selfValidate: true,
+            title: 'success CTB onboarding',
+          },
+        },
+      },
+      'content-manager': {
+        number: 2,
         page: '/content-manager',
-        // pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
         done: false,
         steps: {
           'create-content': {
-            number: 1,
+            closed: false,
             done: false,
+            number: 1,
             pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
             selfValidate: false,
             title: 'init CM onboarding',
           },
           'create-content-success': {
-            number: 2,
+            closed: false,
             done: false,
+            number: 2,
             pageMatcher: /\/content-manager\/.*/,
             selfValidate: true,
             title: 'success CM onboarding',
@@ -40,14 +64,15 @@ const OnboardingProvider = ({ children }) => {
 
   const [onboardingState, setOnboardingState] = useState(initialState);
 
-  const setStepAsComplete = (sectionId, stepId) => {
+  const updateStepProperty = (sectionId, stepId, key, value) => {
     setOnboardingState(prev => {
       const newState = cloneDeep(prev);
       const section = newState.sections[sectionId];
       const steps = section.steps;
       const stepsKeys = Object.keys(steps);
-      section.steps[stepId].done = true;
+      section.steps[stepId][key] = value;
 
+      // Mark section as done if all its steps are done
       newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
         return acc && steps[cur].done;
       }, true);
@@ -56,8 +81,16 @@ const OnboardingProvider = ({ children }) => {
     });
   };
 
+  const setStepAsComplete = (sectionId, stepId) => {
+    updateStepProperty(sectionId, stepId, 'done', true);
+  };
+
+  const setStepAsClosed = (sectionId, stepId) => {
+    updateStepProperty(sectionId, stepId, 'closed', true);
+  };
+
   return (
-    <OnboardingContext.Provider value={{ onboardingState, setStepAsComplete }}>
+    <OnboardingContext.Provider value={{ onboardingState, setStepAsComplete, setStepAsClosed }}>
       {children}
     </OnboardingContext.Provider>
   );
