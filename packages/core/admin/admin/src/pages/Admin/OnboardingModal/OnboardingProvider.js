@@ -3,21 +3,39 @@ import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import OnboardingContext from './OnboardingContext';
 
+// TO FIX: Don't show modal when moving from a LV CT to another
+// TO DO: clean up getCurrentKey function
+
+// Page matcher for each step
+
+// Test if or section object works for CTB and API token
+// Ensure the order sections
+
+// Homepage
+// Onboarding mode in params
+
 const OnboardingProvider = ({ children }) => {
   const initialState = {
     sections: {
-      '/content-manager': {
-        pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
+      'content-manager': {
+        sectionNumber: 1,
+        page: '/content-manager',
+        // pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
         done: false,
         steps: {
-          1: {
+          'create-content': {
             done: false,
-            title: 'init onboarding',
+            pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
+            selfValidate: false,
+            stepNumber: 1,
+            title: 'init CM onboarding',
           },
-          2: {
+          'create-content-success': {
             done: false,
-            title: 'success onboarding',
+            pageMatcher: /\/content-manager\/.*/,
             selfValidate: true,
+            stepNumber: 2,
+            title: 'success CM onboarding',
           },
         },
       },

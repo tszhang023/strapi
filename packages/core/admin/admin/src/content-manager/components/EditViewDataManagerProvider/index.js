@@ -304,7 +304,7 @@ const EditViewDataManagerProvider = ({
           onPut(formData, trackerProperty);
         }
 
-        setStepAsComplete('/content-manager', '1');
+        setStepAsComplete('content-manager', 'create-content');
       } catch (err) {
         console.log('ValidationError');
         console.log(err);

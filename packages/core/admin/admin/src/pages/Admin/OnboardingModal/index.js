@@ -10,6 +10,61 @@ import { Typography } from '@strapi/design-system/Typography';
 import { Button } from '@strapi/design-system/Button';
 import OnboardingContext from './OnboardingContext';
 
+const shouldSkipModal = (
+  section,
+  step,
+  currentSectionKey,
+  sectionKey,
+  previousPathname,
+  pathname
+) => {
+  // Skip if no section for this page
+  // console.log(step);
+
+  if (!step || !section) {
+    return true;
+  };
+
+  // Skip if section is already completed
+  if (section.done) {
+    return true;
+  };
+
+  // Skip if the previous page had the same section as the current
+  // And if it was not the exact same page
+  // if (currentSectionKey === sectionKey && previousPathname !== pathname) {
+  //   return true;
+  // };
+
+
+
+  // not skip modal if step pagematcher is good
+
+  return false;
+};
+
+const getCurrentKey = (steps, pathname) => {
+
+  const orderedStepsKeys = Object.keys(steps)
+    .sort((a, b) => steps[a].stepNumber - steps[b].stepNumber);
+
+  const firstNotDoneKeyForCurrentPage = orderedStepsKeys
+    .find(key => steps[key].done === false && pathname.match(steps[key].pageMatcher));
+  
+  if(!firstNotDoneKeyForCurrentPage) {
+    return null;
+  }
+
+  const keysBeforeCurrentOne = orderedStepsKeys
+    .filter(key => steps[key].stepNumber < steps[firstNotDoneKeyForCurrentPage].stepNumber);
+
+  
+  const allKeysBeforeCurrentAreDone = keysBeforeCurrentOne
+    .reduce((acc, cur) => (acc && steps[cur].done), true);
+
+  return allKeysBeforeCurrentAreDone && firstNotDoneKeyForCurrentPage;
+}
+
 const OnboardingModal = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(null);
@@ -21,46 +76,44 @@ const OnboardingModal = () => {
 
   useEffect(() => {
     // Get current section
-    const currentSectionKey = Object.keys(onboardingState.sections).find(currentSectionKey =>
-      pathname.match(onboardingState.sections[currentSectionKey].pageMatcher)
+    const { sections } = onboardingState;
+    const currentSectionKey = Object.keys(sections).find(key =>
+      pathname.includes(sections[key].page)
     );
-
     const section = onboardingState.sections[currentSectionKey];
 
-    // Skip the modal if we don't have an onboarding section matchin the current page
-    // or if the previous page section is the same as the current one
-    // or if user change page but we are still on the same onboarding section and the pathname is different
-    // example /collectionType/api::country.country !== /collectionType/api::category.category
-    const shouldSkipModal =
-      !section ||
-      section.done ||
-      (currentSectionKey === sectionKey && previousPathname !== pathname);
+    // Get the curent step
+    const steps = section?.steps || {};
 
-    // We need to keep the previous page after testing if we are still on the same section
-    // We need to keep the previous page before rendering or skipping the modal
+    const currentStepKey = getCurrentKey(steps, pathname);
+    const step = steps[currentStepKey];
+
+    // Test BEFORE updating state
+    const skip = shouldSkipModal(
+      section,
+      step,
+      currentSectionKey,
+      sectionKey,
+      previousPathname,
+      pathname
+    );
     setSectionKey(currentSectionKey);
     setPreviousPathname(pathname);
 
-    if (shouldSkipModal) {
+    if (skip) {
       setIsVisible(false);
 
       return;
     }
 
-    const { steps } = section;
-    // Get the curent step
-    const currentStepKey = Object.keys(steps).find(key => steps[key].done === false);
-    const step = steps[currentStepKey];
-    setCurrentStep(step);
     setStepKey(currentStepKey);
+    setCurrentStep(step);
 
     setIsVisible(true);
 
     // TO FIX LATER MISSING DEPENDENCIES
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, onboardingState]);
-
-  // useEffect(() => {console.log('yooooooolooooooooo')}, [onboardingState])
 
   const handleEndActionClick = () => {
     if (currentStep && currentStep.selfValidate) {
