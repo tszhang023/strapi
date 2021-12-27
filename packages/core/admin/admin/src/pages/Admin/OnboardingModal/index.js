@@ -10,95 +10,63 @@ import { Typography } from '@strapi/design-system/Typography';
 import { Button } from '@strapi/design-system/Button';
 import OnboardingContext from './OnboardingContext';
 
-const shouldSkipModal = (
-  section,
-  step,
-  currentSectionKey,
-  sectionKey,
-  previousPathname,
-  pathname
-) => {
-  // Skip if no section for this page
-  // console.log(step);
-
-  if (!step || !section) {
-    return true;
+const shouldSkipModal = ({ section, step }) => {
+  if (!step || step.done || !section || section.done) {
+    return true
   };
-
-  // Skip if section is already completed
-  if (section.done) {
-    return true;
-  };
-
-  // Skip if the previous page had the same section as the current
-  // And if it was not the exact same page
-  // if (currentSectionKey === sectionKey && previousPathname !== pathname) {
-  //   return true;
-  // };
-
-
-
-  // not skip modal if step pagematcher is good
 
   return false;
 };
 
-const getCurrentKey = (steps, pathname) => {
+// Get the onboarding step/section for the current page
+const getCurrentKeyVince = (elements, matcher) => {
+  const orderedElementsKeys = Object.keys(elements).sort(
+    (a, b) => elements[a].number - elements[b].number
+  );
 
-  const orderedStepsKeys = Object.keys(steps)
-    .sort((a, b) => steps[a].stepNumber - steps[b].stepNumber);
+  // Find the first step/section not done && corresponding to the matcher
+  // with no step/section done before this one not corresponding to the matcher
+  let foundNotDoneBefore = false;
+  const firstNotDoneKeyForCurrentPage = orderedElementsKeys.find(key => {
+    const isMatching =
+      elements[key].done === false && matcher(elements[key]) && !foundNotDoneBefore;
 
-  const firstNotDoneKeyForCurrentPage = orderedStepsKeys
-    .find(key => steps[key].done === false && pathname.match(steps[key].pageMatcher));
-  
-  if(!firstNotDoneKeyForCurrentPage) {
-    return null;
-  }
+    // Update the flag
+    foundNotDoneBefore = elements[key].done === false;
 
-  const keysBeforeCurrentOne = orderedStepsKeys
-    .filter(key => steps[key].stepNumber < steps[firstNotDoneKeyForCurrentPage].stepNumber);
+    return isMatching;
+  });
 
-  
-  const allKeysBeforeCurrentAreDone = keysBeforeCurrentOne
-    .reduce((acc, cur) => (acc && steps[cur].done), true);
-
-  return allKeysBeforeCurrentAreDone && firstNotDoneKeyForCurrentPage;
-}
+  return firstNotDoneKeyForCurrentPage;
+};
 
 const OnboardingModal = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(null);
   const [stepKey, setStepKey] = useState(null);
   const [sectionKey, setSectionKey] = useState(null);
-  const [previousPathname, setPreviousPathname] = useState(null);
   const { onboardingState, setStepAsComplete } = useContext(OnboardingContext);
   const { pathname } = useLocation();
 
   useEffect(() => {
     // Get current section
     const { sections } = onboardingState;
-    const currentSectionKey = Object.keys(sections).find(key =>
-      pathname.includes(sections[key].page)
+    const currentSectionKey = getCurrentKeyVince(sections, section =>
+      pathname.includes(section.page)
     );
     const section = onboardingState.sections[currentSectionKey];
 
     // Get the curent step
     const steps = section?.steps || {};
-
-    const currentStepKey = getCurrentKey(steps, pathname);
+    const currentStepKey = getCurrentKeyVince(steps, step => pathname.match(step.pageMatcher));
     const step = steps[currentStepKey];
 
     // Test BEFORE updating state
-    const skip = shouldSkipModal(
+    const skip = shouldSkipModal({
       section,
-      step,
-      currentSectionKey,
-      sectionKey,
-      previousPathname,
-      pathname
-    );
+      step
+    });
     setSectionKey(currentSectionKey);
-    setPreviousPathname(pathname);
 
     if (skip) {
       setIsVisible(false);
