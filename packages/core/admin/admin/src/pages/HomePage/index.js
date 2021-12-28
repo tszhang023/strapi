@@ -3,7 +3,7 @@
  *
  */
 
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
@@ -15,6 +15,8 @@ import { Box } from '@strapi/design-system/Box';
 import { Grid, GridItem } from '@strapi/design-system/Grid';
 import Logo from '../../assets/images/homepage-logo.png';
 import { useModels } from '../../hooks';
+import OnboardingHome from '../Admin/OnboardingModal/OnboardingHome';
+import OnboardingContext from '../Admin/OnboardingModal/OnboardingContext';
 import SocialLinks from './SocialLinks';
 import HomeHeader from './HomeHeader';
 import ContentBlocks from './ContentBlocks';
@@ -31,6 +33,7 @@ const LogoContainer = styled(Box)`
 const HomePage = () => {
   // // Temporary until we develop the menu API
   const { collectionTypes, singleTypes, isLoading: isLoadingForModels } = useModels();
+  const { onboardingState } = useContext(OnboardingContext);
 
   const { push } = useHistory();
   const handleClick = e => {
@@ -71,7 +74,7 @@ const HomePage = () => {
           </Grid>
           <Grid gap={6}>
             <GridItem col={8} s={12}>
-              <ContentBlocks />
+              {onboardingState.done ? <ContentBlocks /> : <OnboardingHome />}
             </GridItem>
             <GridItem col={4} s={12}>
               <SocialLinks />

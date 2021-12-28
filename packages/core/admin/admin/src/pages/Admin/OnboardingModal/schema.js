@@ -1,9 +1,14 @@
 const initialState = {
+  done: false,
+  active: false,
   sections: {
     'content-type-builder': {
       number: 3,
       page: 'plugins/content-type-builder',
       done: false,
+      homepage_title: 'Build the content structure',
+      cta_title: 'Go to the Content-type Builder',
+      cta_action: 'plugins/content-type-builder',
       steps: {
         'create-content-type': {
           closed: false,
@@ -27,6 +32,9 @@ const initialState = {
       number: 1,
       page: '/content-manager',
       done: false,
+      homepage_title: 'What would you like to share with the world?',
+      cta_title: 'Create sample data',
+      cta_action: '/content-manager',
       steps: {
         'create-content': {
           closed: false,
@@ -50,6 +58,9 @@ const initialState = {
       number: 2,
       page: 'settings/api-tokens',
       done: false,
+      homepage_title: 'See content in action',
+      cta_title: 'Test the API',
+      cta_action: '/settings/api-tokens',
       steps: {
         'create-api-tokens': {
           closed: false,

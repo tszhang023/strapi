@@ -6,8 +6,8 @@ import OnboardingContext from './OnboardingContext';
 import initialState from './schema';
 
 // TO WAIT FOR PRODUCT: Don't show modal when moving from a LV CT to another
-
 // clean regex
+// Clean local storage object (only done and closed steps)
 
 // Homepage
 // Onboarding mode in params
@@ -29,6 +29,11 @@ const OnboardingProvider = ({ children }) => {
       // Mark section as done if all its steps are done
       newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
         return acc && steps[cur].done;
+      }, true);
+
+      const sections = Object.keys(newState.sections);
+      newState.done = sections.reduce((acc, cur) => {
+        return acc && newState.sections[cur].done;
       }, true);
 
       return newState;

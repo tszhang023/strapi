@@ -19,7 +19,7 @@ const shouldSkipModal = ({ section, step }) => {
 };
 
 // Get the onboarding step/section for the current page
-const getCurrentKeyVince = (elements, matcher) => {
+export const getCurrentKey = (elements, matcher) => {
   const orderedElementsKeys = Object.keys(elements).sort(
     (a, b) => elements[a].number - elements[b].number
   );
@@ -51,14 +51,12 @@ const OnboardingModal = () => {
   useEffect(() => {
     // Get current section
     const { sections } = onboardingState;
-    const currentSectionKey = getCurrentKeyVince(sections, section =>
-      pathname.includes(section.page)
-    );
+    const currentSectionKey = getCurrentKey(sections, section => pathname.includes(section.page));
     const section = onboardingState.sections[currentSectionKey];
 
     // Get the curent step
     const steps = section?.steps || {};
-    const currentStepKey = getCurrentKeyVince(steps, step => pathname.match(step.pageMatcher));
+    const currentStepKey = getCurrentKey(steps, step => pathname.match(step.pageMatcher));
     const step = steps[currentStepKey];
 
     // Test BEFORE updating state
@@ -92,6 +90,18 @@ const OnboardingModal = () => {
 
     setStepAsClosed(sectionKey, stepKey);
   };
+
+  // useEffect(() => {
+  //   // Homepage link === onboarding active = true
+  //   // on arrive sur API Token - y a bien une modale qui doit arriver donc on laisse onboarding true
+  //   // clique sur link modal qui amène à section CM
+  //   //
+  //   // media lib
+  //   // CM === section === firstSectionNotDone
+  //   if(!there firstSectionNotDone for this pathname) {
+  //     setOnboardingActiveState(false)
+  //   }
+  // }, [pathname]);
 
   return (
     <>

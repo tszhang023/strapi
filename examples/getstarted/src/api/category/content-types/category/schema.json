@@ -53,6 +53,14 @@
         }
       },
       "type": "date"
+    },
+    "dedewdew": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
     }
   }
 }
