@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { useIntl } from 'react-intl';
 import {
   SettingsPageTitle,
@@ -27,6 +27,7 @@ import { useRouteMatch, useHistory } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { formatAPIErrors } from '../../../../../utils';
 import { axiosInstance } from '../../../../../core/utils';
+import OnboardingContext from '../../../../Admin/OnboardingModal/OnboardingContext';
 import schema from './utils/schema';
 import LoadingView from './components/LoadingView';
 import HeaderContentBox from './components/ContentBox';
@@ -40,6 +41,7 @@ const ApiTokenCreateView = () => {
   const history = useHistory();
   const { trackUsage } = useTracking();
   const trackUsageRef = useRef(trackUsage);
+  const { setStepAsComplete } = useContext(OnboardingContext);
 
   const {
     params: { id },
@@ -96,6 +98,10 @@ const ApiTokenCreateView = () => {
         type: 'success',
         message: formatMessage({ id: 'notification.success.saved', defaultMessage: 'Saved' }),
       });
+
+      if (isCreating) {
+        setStepAsComplete('api-tokens', 'create-api-tokens');
+      }
 
       trackUsageRef.current(isCreating ? 'didCreateToken' : 'didEditToken', {
         type: apiToken.type,

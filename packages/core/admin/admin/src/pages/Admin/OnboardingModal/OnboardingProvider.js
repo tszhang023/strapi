@@ -7,13 +7,16 @@ import initialState from './schema';
 
 // TO WAIT FOR PRODUCT: Don't show modal when moving from a LV CT to another
 
-// Test if or section object works for CTB and API token
+// clean regex
 
 // Homepage
 // Onboarding mode in params
 
 const OnboardingProvider = ({ children }) => {
-  const [onboardingState, setOnboardingState] = usePersistentState('onboardingState', initialState);
+  const [onboardingState, setOnboardingState] = usePersistentState(
+    'onboarding-state',
+    initialState
+  );
 
   const updateStepProperty = (sectionId, stepId, key, value) => {
     setOnboardingState(prev => {
