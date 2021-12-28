@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef, useContext } from 'react';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { get, groupBy, set, size } from 'lodash';
 import {
@@ -15,7 +15,7 @@ import { useIntl } from 'react-intl';
 import { useLocation, useRouteMatch, Redirect } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import { compose } from 'redux';
-import OnboardingContext from '../../../../../admin/admin/src/pages/Admin/OnboardingModal/OnboardingContext';
+// import OnboardingContext from '../../../../../admin/admin/src/pages/Admin/OnboardingModal/OnboardingContext';
 import DataManagerContext from '../../contexts/DataManagerContext';
 import useFormModalNavigation from '../../hooks/useFormModalNavigation';
 import getTrad from '../../utils/getTrad';
@@ -63,7 +63,7 @@ const DataManagerProvider = ({
   const dispatch = useDispatch();
   const toggleNotification = useNotification();
   const { lockAppWithAutoreload, unlockAppWithAutoreload } = useAutoReloadOverlayBlocker();
-  const { setStepAsComplete } = useContext(OnboardingContext);
+  // const { setStepAsComplete } = useContext(OnboardingContext);
 
   const { getPlugin } = useStrapiApp();
 
@@ -461,9 +461,9 @@ const DataManagerProvider = ({
 
       await request(requestURL, { method, body }, true);
 
-      if (isCreating) {
-        await setStepAsComplete('content-type-builder', 'create-content-type');
-      }
+      // if (isCreating) {
+      //   await setStepAsComplete('content-type-builder', 'create-content-type');
+      // }
 
       unlockAppWithAutoreload();
 

@@ -16,23 +16,19 @@ const OnboardingProvider = ({ children }) => {
   const [onboardingState, setOnboardingState] = usePersistentState('onboardingState', initialState);
 
   const updateStepProperty = (sectionId, stepId, key, value) => {
-    return new Promise(resolve => {
-      setOnboardingState(prev => {
-        const newState = cloneDeep(prev);
-        const section = newState.sections[sectionId];
-        const steps = section.steps;
-        const stepsKeys = Object.keys(steps);
-        section.steps[stepId][key] = value;
+    setOnboardingState(prev => {
+      const newState = cloneDeep(prev);
+      const section = newState.sections[sectionId];
+      const steps = section.steps;
+      const stepsKeys = Object.keys(steps);
+      section.steps[stepId][key] = value;
 
-        // Mark section as done if all its steps are done
-        newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
-          return acc && steps[cur].done;
-        }, true);
+      // Mark section as done if all its steps are done
+      newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
+        return acc && steps[cur].done;
+      }, true);
 
-        resolve();
-
-        return newState;
-      });
+      return newState;
     });
   };
 
@@ -56,3 +52,22 @@ OnboardingProvider.propTypes = {
 };
 
 export default OnboardingProvider;
+
+// return new Promise(resolve => {
+//   setOnboardingState(prev => {
+//     const newState = cloneDeep(prev);
+//     const section = newState.sections[sectionId];
+//     const steps = section.steps;
+//     const stepsKeys = Object.keys(steps);
+//     section.steps[stepId][key] = value;
+
+//     // Mark section as done if all its steps are done
+//     newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
+//       return acc && steps[cur].done;
+//     }, true);
+
+//     resolve();
+
+//     return newState;
+//   });
+// });
