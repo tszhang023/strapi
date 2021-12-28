@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
+import { usePersistentState } from '@strapi/helper-plugin';
 import OnboardingContext from './OnboardingContext';
+import initialState from './schema';
 
 // TO WAIT FOR PRODUCT: Don't show modal when moving from a LV CT to another
 
@@ -11,82 +13,35 @@ import OnboardingContext from './OnboardingContext';
 // Onboarding mode in params
 
 const OnboardingProvider = ({ children }) => {
-  const initialState = {
-    sections: {
-      'content-type-builder': {
-        number: 1,
-        page: 'plugins/content-type-builder',
-        done: false,
-        steps: {
-          'create-content-type': {
-            closed: false,
-            done: false,
-            number: 1,
-            pageMatcher: /\/plugins\/content-type-builder\/[^/]+\/[^/]+\/?$/,
-            selfValidate: false,
-            title: 'init CTB onboarding',
-          },
-          'create-content-type-success': {
-            closed: false,
-            done: false,
-            number: 2,
-            pageMatcher: /\/plugins\/content-type-builder\/.*/,
-            selfValidate: true,
-            title: 'success CTB onboarding',
-          },
-        },
-      },
-      'content-manager': {
-        number: 2,
-        page: '/content-manager',
-        done: false,
-        steps: {
-          'create-content': {
-            closed: false,
-            done: false,
-            number: 1,
-            pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
-            selfValidate: false,
-            title: 'init CM onboarding',
-          },
-          'create-content-success': {
-            closed: false,
-            done: false,
-            number: 2,
-            pageMatcher: /\/content-manager\/.*/,
-            selfValidate: true,
-            title: 'success CM onboarding',
-          },
-        },
-      },
-    },
-  };
-
-  const [onboardingState, setOnboardingState] = useState(initialState);
+  const [onboardingState, setOnboardingState] = usePersistentState('onboardingState', initialState);
 
   const updateStepProperty = (sectionId, stepId, key, value) => {
-    setOnboardingState(prev => {
-      const newState = cloneDeep(prev);
-      const section = newState.sections[sectionId];
-      const steps = section.steps;
-      const stepsKeys = Object.keys(steps);
-      section.steps[stepId][key] = value;
+    return new Promise(resolve => {
+      setOnboardingState(prev => {
+        const newState = cloneDeep(prev);
+        const section = newState.sections[sectionId];
+        const steps = section.steps;
+        const stepsKeys = Object.keys(steps);
+        section.steps[stepId][key] = value;
 
-      // Mark section as done if all its steps are done
-      newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
-        return acc && steps[cur].done;
-      }, true);
+        // Mark section as done if all its steps are done
+        newState.sections[sectionId].done = stepsKeys.reduce((acc, cur) => {
+          return acc && steps[cur].done;
+        }, true);
 
-      return newState;
+        resolve();
+
+        return newState;
+      });
     });
   };
 
   const setStepAsComplete = (sectionId, stepId) => {
-    updateStepProperty(sectionId, stepId, 'done', true);
+    return updateStepProperty(sectionId, stepId, 'done', true);
   };
 
   const setStepAsClosed = (sectionId, stepId) => {
-    updateStepProperty(sectionId, stepId, 'closed', true);
+    return updateStepProperty(sectionId, stepId, 'closed', true);
   };
 
   return (
@@ -101,24 +56,3 @@ OnboardingProvider.propTypes = {
 };
 
 export default OnboardingProvider;
-
-// const initialState = {
-//   sections: {
-//     '/content-manager': {
-//       name: 'content-manager',
-//       pageMatcher: /\/content-manager\/[^/]+\/[^/]+\/?$/,
-//       done: false,
-//       steps: {
-//         1: {
-//           done: false,
-//           title: 'init onboarding',
-//         },
-//         2: {
-//           done: false,
-//           title: 'success onboarding',
-//           selfValidate: true,
-//         },
-//       },
-//     },
-//   },
-// };
