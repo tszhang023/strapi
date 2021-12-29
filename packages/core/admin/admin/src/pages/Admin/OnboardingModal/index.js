@@ -77,7 +77,6 @@ const OnboardingModal = () => {
 
     setIsVisible(true);
 
-    // TO FIX LATER MISSING DEPENDENCIES
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, onboardingState]);
 
@@ -90,18 +89,6 @@ const OnboardingModal = () => {
 
     setStepAsClosed(sectionKey, stepKey);
   };
-
-  // useEffect(() => {
-  //   // Homepage link === onboarding active = true
-  //   // on arrive sur API Token - y a bien une modale qui doit arriver donc on laisse onboarding true
-  //   // clique sur link modal qui amène à section CM
-  //   //
-  //   // media lib
-  //   // CM === section === firstSectionNotDone
-  //   if(!there firstSectionNotDone for this pathname) {
-  //     setOnboardingActiveState(false)
-  //   }
-  // }, [pathname]);
 
   return (
     <>
