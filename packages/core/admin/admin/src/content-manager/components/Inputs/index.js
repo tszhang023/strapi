@@ -41,7 +41,7 @@ function Inputs({
   const { contentType: currentContentTypeLayout } = useContentTypeLayout();
 
   const disabled = useMemo(() => !get(metadatas, 'editable', true), [metadatas]);
-  const type = fieldSchema.type;
+  const type = fieldSchema.fieldComponent ?? fieldSchema.type;
 
   const errorId = useMemo(() => {
     return get(formErrors, [keys, 'id'], null);
