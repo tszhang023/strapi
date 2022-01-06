@@ -24,7 +24,8 @@
   "workspaces": [
     "packages/*",
     "packages/*/*",
-    "examples/*"
+    "examples/*",
+    "cem"
   ],
   "scripts": {
     "setup": "yarn && yarn build",
