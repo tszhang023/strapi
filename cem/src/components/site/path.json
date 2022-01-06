@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_site_paths",
+  "info": {
+    "displayName": "path",
+    "icon": "angle-double-right",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "page": {
+      "displayName": "page",
+      "type": "component",
+      "repeatable": true,
+      "component": "site.page"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "index": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
+    }
+  }
+}

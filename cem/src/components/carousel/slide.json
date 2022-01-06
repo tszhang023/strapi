@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_carousel_slides",
+  "info": {
+    "displayName": "slide",
+    "icon": "photo-video"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

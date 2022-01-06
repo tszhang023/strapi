@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_site_pages",
+  "info": {
+    "displayName": "page",
+    "icon": "align-right",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "page": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
+    }
+  }
+}

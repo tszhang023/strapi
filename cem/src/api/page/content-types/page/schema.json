@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "stage": {
+      "type": "string",
+      "default": "draft",
+      "configurable": false
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "section.banner",
+        "section.news",
+        "section.carousel"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "fieldComponent": "TranslatableText"
+    },
+    "description": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    },
+    "Simple_text": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "cem",
+  "version": "0.0.0",
+  "description": "This is the description of the plugin.",
+  "strapi": {
+    "name": "cem",
+    "description": "Description of cem plugin",
+    "kind": "plugin"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-react": "3.0.3",
+    "ckeditor5-build-strapi-wysiwyg": "2.0.0-rc.1",
+    "react-tabs": "3.2.3"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "maintainers": [
+    {
+      "name": "A Strapi developer"
+    }
+  ],
+  "engines": {
+    "node": ">=12.x. <=16.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

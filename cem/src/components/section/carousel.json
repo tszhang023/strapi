@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_section_carousels",
+  "info": {
+    "displayName": "carousel",
+    "icon": "audio-description"
+  },
+  "options": {},
+  "attributes": {
+    "slide": {
+      "type": "component",
+      "repeatable": true,
+      "component": "carousel.slide"
+    }
+  }
+}
