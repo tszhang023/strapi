@@ -12,6 +12,7 @@ import {
   SubNavSections,
   SubNavLink,
 } from '@strapi/design-system/SubNav';
+import { useAppInfos } from '@strapi/helper-plugin';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useIntl } from 'react-intl';
 import matchSorter from 'match-sorter';
@@ -42,6 +43,10 @@ const LeftMenu = () => {
 
   const intlCollectionTypeLinks = toIntl(collectionTypeLinks);
   const intlSingleTypeLinks = toIntl(singleTypeLinks);
+
+  const user = useAppInfos();
+
+  console.log(user);
 
   const menu = [
     {

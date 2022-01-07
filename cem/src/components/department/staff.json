@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_department_staff",
+  "info": {
+    "displayName": "staff",
+    "icon": "child"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "admin_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "admin::user"
+    }
+  }
+}

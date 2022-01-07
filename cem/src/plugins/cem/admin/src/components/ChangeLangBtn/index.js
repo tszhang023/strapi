@@ -24,6 +24,7 @@ margin-bottom: 3px;
 `;
 
 const ChangeLangBtn = (props) => {
+  console.log(props);
   return(
     <StyledDiv>
       <StyledTitle>

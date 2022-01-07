@@ -1,6 +1,7 @@
 {
   "kind": "collectionType",
   "collectionName": "pages",
+  "menu-group": "management",
   "info": {
     "singularName": "page",
     "pluralName": "pages",
