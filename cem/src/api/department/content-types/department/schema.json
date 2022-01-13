@@ -19,6 +19,12 @@
       "type": "component",
       "repeatable": true,
       "component": "department.staff"
+    },
+    "menus": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::menu.menu",
+      "inversedBy": "departments"
     }
   }
 }

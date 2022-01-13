@@ -1,21 +1,33 @@
 {
   "kind": "collectionType",
   "collectionName": "pages",
-  "menu-group": "management",
   "info": {
     "singularName": "page",
     "pluralName": "pages",
     "displayName": "page",
-    "description": ""
+    "description": "",
+    "menu-group": "management"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "stage": {
       "type": "string",
       "default": "draft",
+      "configurable": false
+    },
+    "schedulePublishDate": {
+      "type": "string",
+      "configurable": false
+    },
+    "publishedDate": {
+      "type": "string",
+      "configurable": false
+    },
+    "rejectMessage": {
+      "type": "string",
       "configurable": false
     },
     "content": {
@@ -36,6 +48,9 @@
     },
     "Simple_text": {
       "type": "string"
+    },
+    "name": {
+      "type": "date"
     }
   }
 }

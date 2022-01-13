@@ -50,6 +50,15 @@
                                                     "stage": {
                                                       "type": "string"
                                                     },
+                                                    "schedulePublishDate": {
+                                                      "type": "string"
+                                                    },
+                                                    "publishedDate": {
+                                                      "type": "string"
+                                                    },
+                                                    "rejectMessage": {
+                                                      "type": "string"
+                                                    },
                                                     "content": {
                                                       "type": "array",
                                                       "items": {
@@ -504,15 +513,15 @@
                                                     "Simple_text": {
                                                       "type": "string"
                                                     },
+                                                    "name": {
+                                                      "type": "string",
+                                                      "format": "date"
+                                                    },
                                                     "createdAt": {
                                                       "type": "string",
                                                       "format": "date-time"
                                                     },
                                                     "updatedAt": {
-                                                      "type": "string",
-                                                      "format": "date-time"
-                                                    },
-                                                    "publishedAt": {
                                                       "type": "string",
                                                       "format": "date-time"
                                                     },
@@ -1253,6 +1262,15 @@
                                                   "stage": {
                                                     "type": "string"
                                                   },
+                                                  "schedulePublishDate": {
+                                                    "type": "string"
+                                                  },
+                                                  "publishedDate": {
+                                                    "type": "string"
+                                                  },
+                                                  "rejectMessage": {
+                                                    "type": "string"
+                                                  },
                                                   "content": {
                                                     "type": "array",
                                                     "items": {
@@ -1707,15 +1725,15 @@
                                                   "Simple_text": {
                                                     "type": "string"
                                                   },
+                                                  "name": {
+                                                    "type": "string",
+                                                    "format": "date"
+                                                  },
                                                   "createdAt": {
                                                     "type": "string",
                                                     "format": "date-time"
                                                   },
                                                   "updatedAt": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                  },
-                                                  "publishedAt": {
                                                     "type": "string",
                                                     "format": "date-time"
                                                   },
