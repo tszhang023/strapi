@@ -103,7 +103,6 @@ export default class MultiColumn extends Plugin {
     conversion.for( 'editingDowncast' ).elementToElement( {
       model: 'multiColumnLeft',
       view: ( modelElement, { writer: viewWriter } ) => {
-        // Note: You use a more specialized createEditableElement() method here.
         const div = viewWriter.createEditableElement( 'div', { class: 'multi-column-left' } );
 
         return toWidgetEditable( div, viewWriter );

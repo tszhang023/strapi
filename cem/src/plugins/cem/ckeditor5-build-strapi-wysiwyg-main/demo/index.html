@@ -32,6 +32,42 @@
 		.multi-column p{
 			margin: 0
 		}
+
+		.cem-button {
+			margin: 5px;
+    	padding: 5px 20px;
+    	border-radius: 50px 20px;
+    	text-decoration: unset;
+			display: inline-block;
+		}
+
+		.btn-primary{
+			color: #FFFFFF;
+			border: solid 1px hsl(0, 2%, 38%);
+			background-color: #000000;
+		}
+
+		.btn-secondary{
+			color: #161616;
+			border: solid 1px hsl(0, 2%, 38%);
+			background-color: #FFEBB3;
+		}
+
+		.btn-tertiary{
+			color: #161616;
+			border: solid 1px hsl(0, 2%, 38%);
+			background-color: #FFEBB3;
+		}
+
+		.btn-outline{
+			color: #161616;
+			border: solid 1px hsl(0, 2%, 38%);
+		}
+
+		.table{
+			margin: 0;
+    	width: 100%;
+		}
 	</style>
 </head>
 
@@ -50,6 +86,7 @@
 				href="https://github.com/Roslovets-Inc/strapi-plugin-ckeditor5">strapi-plugin-ckeditor5</a>: <b>npm i
 				strapi-plugin-ckeditor5</b></p>
 
+				<section class="multi-column ck-widget ck-widget_with-selection-handle" contenteditable="false"><div class="multi-column-left ck-editor__editable ck-editor__nested-editable" contenteditable="true"><p><span class="text-huge"><strong>left side&nbsp;</strong></span></p><ul><li>item 1</li><li>item 2</li><li>item 3</li></ul><p><a href="https://www.google.com" class="cem-button btn-primary">Read &nbsp;<strong>mo</strong><i><strong>re</strong></i></a><i><strong> </strong></i><a class="cem-button btn-outline" href="https://www.google.com"><i><strong>skip</strong></i></a></p><p><br data-cke-filler="true"></p></div><div class="multi-column-right ck-editor__editable ck-editor__nested-editable" contenteditable="true"><p><i><strong>Right </strong></i><span class="text-huge"><strong>side</strong></span></p><p><br data-cke-filler="true"></p><p>This is an instance of the <a href="https://github.com/Roslovets-Inc/ckeditor5-build-strapi-wysiwyg">enhanced CKEditor 5 build</a> for <a href="https://strapi.io/">Strapi</a>. Try to do your usual things.</p><p>Integrate this WYSIWYG-editor into your Strapi with <a href="https://github.com/Roslovets-Inc/strapi-plugin-ckeditor5">strapi-plugin-ckeditor5</a>: <strong>npm i strapi-plugin-ckeditor5</strong></p><p><br data-cke-filler="true"></p><p><strong>link: </strong><a href="https://www.google.com" target="_blank" rel="noopener noreferrer" isButton btnTypeprimary><strong>https://www.google.com</strong></a></p></div><div class="ck ck-widget__selection-handle"><svg class="ck ck-icon" viewBox="0 0 16 16"><path d="M4 0v1H1v3H0V.5A.5.5 0 0 1 .5 0H4zm8 0h3.5a.5.5 0 0 1 .5.5V4h-1V1h-3V0zM4 16H.5a.5.5 0 0 1-.5-.5V12h1v3h3v1zm8 0v-1h3v-3h1v3.5a.5.5 0 0 1-.5.5H12z"></path><path fill-opacity=".256" d="M1 1h14v14H1z"></path><g class="ck-icon__selected-indicator"><path d="M7 0h2v1H7V0zM0 7h1v2H0V7zm15 0h1v2h-1V7zm-8 8h2v1H7v-1z"></path><path fill-opacity=".254" d="M1 1h14v14H1z"></path></g></svg></div><div class="ck ck-reset_all ck-widget__type-around"><div class="ck ck-widget__type-around__button ck-widget__type-around__button_before" title="Insert paragraph before block"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 8"><path d="M9.055.263v3.972h-6.77M1 4.216l2-2.038m-2 2 2 2.038"></path></svg></div><div class="ck ck-widget__type-around__button ck-widget__type-around__button_after" title="Insert paragraph after block"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 8"><path d="M9.055.263v3.972h-6.77M1 4.216l2-2.038m-2 2 2 2.038"></path></svg></div><div class="ck ck-widget__type-around__fake-caret"></div></div></section>
 		<figure class="image">
 			<img src="./sample.jpg" alt="Autumn fields" />
 			<figcaption>Sample image</figcaption>
@@ -65,15 +102,18 @@
 	<script src="./build/ckeditor.js"></script>
 	<!-- For local testing -->
 	<script src="../build/ckeditor.js"></script>
+	<script src="../node_modules/@ckeditor/ckeditor5-inspector/build/inspector.js"></script>
 	<script>
 		ClassicEditor.create(document.querySelector('#editor'))
 			.then(editor => {
 				window.editor = editor;
+				CKEditorInspector.attach( editor );
 			})
 			.catch(error => {
 				console.error('There was a problem initializing the editor.', error);
 			});
 	</script>
+
 
 </body>
 
