@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_section_double_cards",
+  "info": {
+    "displayName": "Double Card",
+    "icon": "angle-right"
+  },
+  "options": {},
+  "attributes": {
+    "left_content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    },
+    "right_content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    }
+  }
+}

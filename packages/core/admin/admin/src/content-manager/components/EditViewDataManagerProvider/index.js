@@ -495,6 +495,7 @@ const EditViewDataManagerProvider = ({
         moveRelation,
         onChange: handleChange,
         onPublish: handlePublish,
+        onPut,
         onUnpublish,
         onRemoveRelation,
         readActionAllowedFields,

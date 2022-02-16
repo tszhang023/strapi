@@ -35,30 +35,15 @@ const cmPermissions = permissions.contentManager;
 const ctbPermissions = [{ action: 'plugin::content-type-builder.read', subject: null }];
 
 /* eslint-disable  react/no-array-index-key */
-const EditView = ({
-  allowedActions,
-  isSingleType,
-  goBack,
-  layout,
-  slug,
-  id,
-  origin,
-  userPermissions,
-}) => {
+const EditView = ({ allowedActions, isSingleType, goBack, layout, slug, id, origin, userPermissions }) => {
   const { trackUsage } = useTracking();
   const { formatMessage } = useIntl();
-  const {
-    createActionAllowedFields,
-    readActionAllowedFields,
-    updateActionAllowedFields,
-  } = useMemo(() => {
+  const { createActionAllowedFields, readActionAllowedFields, updateActionAllowedFields } = useMemo(() => {
     return getFieldsActionMatchingPermissions(userPermissions, slug);
   }, [userPermissions, slug]);
 
   const configurationPermissions = useMemo(() => {
-    return isSingleType
-      ? cmPermissions.singleTypesConfigurations
-      : cmPermissions.collectionTypesConfigurations;
+    return isSingleType ? cmPermissions.singleTypesConfigurations : cmPermissions.collectionTypesConfigurations;
   }, [isSingleType]);
 
   // // FIXME when changing the routing
@@ -67,15 +52,14 @@ const EditView = ({
   }/${slug}/configurations/edit`;
   const currentContentTypeLayoutData = get(layout, ['contentType'], {});
 
-  const DataManagementWrapper = useMemo(
-    () => (isSingleType ? SingleTypeFormWrapper : CollectionTypeFormWrapper),
-    [isSingleType]
-  );
+  const DataManagementWrapper = useMemo(() => (isSingleType ? SingleTypeFormWrapper : CollectionTypeFormWrapper), [
+    isSingleType,
+  ]);
 
   // Check if a block is a dynamic zone
-  const isDynamicZone = useCallback(block => {
-    return block.every(subBlock => {
-      return subBlock.every(obj => obj.fieldSchema.type === 'dynamiczone');
+  const isDynamicZone = useCallback((block) => {
+    return block.every((subBlock) => {
+      return subBlock.every((obj) => obj.fieldSchema.type === 'dynamiczone');
     });
   }, []);
 
@@ -84,10 +68,7 @@ const EditView = ({
       return [];
     }
 
-    return createAttributesLayout(
-      currentContentTypeLayoutData.layouts.edit,
-      currentContentTypeLayoutData.attributes
-    );
+    return createAttributesLayout(currentContentTypeLayoutData.layouts.edit, currentContentTypeLayoutData.attributes);
   }, [currentContentTypeLayoutData]);
 
   const relationsLayout = currentContentTypeLayoutData.layouts.editRelations;
@@ -110,6 +91,12 @@ const EditView = ({
         redirectionLink,
         status,
       }) => {
+        let allowedAction = updateActionAllowedFields;
+
+        if (data?.stage && data.stage !== 'draft' && data.stage !== 'published') {
+          allowedAction = [];
+        }
+
         return (
           <EditViewDataManagerProvider
             allowedActions={allowedActions}
@@ -130,7 +117,7 @@ const EditView = ({
             redirectToPreviousPage={goBack}
             slug={slug}
             status={status}
-            updateActionAllowedFields={updateActionAllowedFields}
+            updateActionAllowedFields={allowedAction}
           >
             <Main aria-busy={status !== 'resolved'}>
               <Header allowedActions={allowedActions} />
@@ -178,50 +165,48 @@ const EditView = ({
                               {row.map((grid, gridIndex) => {
                                 return (
                                   <Grid gap={4} key={gridIndex}>
-                                    {grid.map(
-                                      ({ fieldSchema, labelAction, metadatas, name, size }) => {
-                                        const isComponent = fieldSchema.type === 'component';
+                                    {grid.map(({ fieldSchema, labelAction, metadatas, name, size }) => {
+                                      const isComponent = fieldSchema.type === 'component';
 
-                                        if (isComponent) {
-                                          const {
-                                            component,
-                                            max,
-                                            min,
-                                            repeatable = false,
-                                            required = false,
-                                          } = fieldSchema;
-
-                                          return (
-                                            <GridItem col={size} s={12} xs={12} key={component}>
-                                              <FieldComponent
-                                                componentUid={component}
-                                                labelAction={labelAction}
-                                                isRepeatable={repeatable}
-                                                intlLabel={{
-                                                  id: metadatas.label,
-                                                  defaultMessage: metadatas.label,
-                                                }}
-                                                max={max}
-                                                min={min}
-                                                name={name}
-                                                required={required}
-                                              />
-                                            </GridItem>
-                                          );
-                                        }
+                                      if (isComponent) {
+                                        const {
+                                          component,
+                                          max,
+                                          min,
+                                          repeatable = false,
+                                          required = false,
+                                        } = fieldSchema;
 
                                         return (
-                                          <GridItem col={size} key={name} s={12} xs={12}>
-                                            <Inputs
-                                              fieldSchema={fieldSchema}
-                                              keys={name}
+                                          <GridItem col={size} s={12} xs={12} key={component}>
+                                            <FieldComponent
+                                              componentUid={component}
                                               labelAction={labelAction}
-                                              metadatas={metadatas}
+                                              isRepeatable={repeatable}
+                                              intlLabel={{
+                                                id: metadatas.label,
+                                                defaultMessage: metadatas.label,
+                                              }}
+                                              max={max}
+                                              min={min}
+                                              name={name}
+                                              required={required}
                                             />
                                           </GridItem>
                                         );
                                       }
-                                    )}
+
+                                      return (
+                                        <GridItem col={size} key={name} s={12} xs={12}>
+                                          <Inputs
+                                            fieldSchema={fieldSchema}
+                                            keys={name}
+                                            labelAction={labelAction}
+                                            metadatas={metadatas}
+                                          />
+                                        </GridItem>
+                                      );
+                                    })}
                                   </Grid>
                                 );
                               })}
@@ -233,11 +218,38 @@ const EditView = ({
                   </GridItem>
                   <GridItem col={3} s={12}>
                     <Stack size={2}>
+                      {data?.rejectMessage && (
+                        <Box
+                          as="aside"
+                          aria-labelledby="additional-informations"
+                          background="secondary100"
+                          borderColor="secondary200"
+                          hasRadius
+                          paddingBottom={4}
+                          paddingLeft={4}
+                          paddingRight={4}
+                          paddingTop={6}
+                          shadow="tableShadow"
+                        >
+                          <Typography variant="sigma" textColor="neutral600" id="additional-informations">
+                            Reject Message
+                          </Typography>
+                          <Box paddingTop={2} paddingBottom={6}>
+                            <Divider />
+                          </Box>
+                          <Typography
+                            fontWeight="bold"
+                            dangerouslySetInnerHTML={{
+                              __html: data.rejectMessage.replace(/\n/g, '<br />'),
+                            }}
+                          />
+                        </Box>
+                      )}
                       <DraftAndPublishBadge />
                       <Box
                         as="aside"
                         aria-labelledby="additional-informations"
-                        background="neutral0"
+                        background="red150"
                         borderColor="neutral150"
                         hasRadius
                         paddingBottom={4}
@@ -266,8 +278,7 @@ const EditView = ({
                             {formatMessage(
                               {
                                 id: getTrad('containers.Edit.relations'),
-                                defaultMessage:
-                                  '{number, plural, =0 {relations} one {relation} other {relations}}',
+                                defaultMessage: '{number, plural, =0 {relations} one {relation} other {relations}}',
                               },
                               { number: displayedRelationsLength }
                             )}
@@ -276,34 +287,32 @@ const EditView = ({
                             <Divider />
                           </Box>
                           <Stack size={4}>
-                            {relationsLayout.map(
-                              ({ name, fieldSchema, labelAction, metadatas, queryInfos }) => {
-                                return (
-                                  <SelectWrapper
-                                    {...fieldSchema}
-                                    {...metadatas}
-                                    key={name}
-                                    description={metadatas.description}
-                                    intlLabel={{
-                                      id: metadatas.label,
-                                      defaultMessage: metadatas.label,
-                                    }}
-                                    labelAction={labelAction}
-                                    name={name}
-                                    relationsType={fieldSchema.relationType}
-                                    queryInfos={queryInfos}
-                                    placeholder={
-                                      metadatas.placeholder
-                                        ? {
-                                            id: metadatas.placeholder,
-                                            defaultMessage: metadatas.placeholder,
-                                          }
-                                        : null
-                                    }
-                                  />
-                                );
-                              }
-                            )}
+                            {relationsLayout.map(({ name, fieldSchema, labelAction, metadatas, queryInfos }) => {
+                              return (
+                                <SelectWrapper
+                                  {...fieldSchema}
+                                  {...metadatas}
+                                  key={name}
+                                  description={metadatas.description}
+                                  intlLabel={{
+                                    id: metadatas.label,
+                                    defaultMessage: metadatas.label,
+                                  }}
+                                  labelAction={labelAction}
+                                  name={name}
+                                  relationsType={fieldSchema.relationType}
+                                  queryInfos={queryInfos}
+                                  placeholder={
+                                    metadatas.placeholder
+                                      ? {
+                                          id: metadatas.placeholder,
+                                          defaultMessage: metadatas.placeholder,
+                                        }
+                                      : null
+                                  }
+                                />
+                              );
+                            })}
                           </Stack>
                         </Box>
                       )}
@@ -343,7 +352,7 @@ const EditView = ({
                               })}
                             </LinkButton>
                           </CheckPermissions>
-                          <InjectionZone area="contentManager.editView.right-links" slug={slug} />
+                          <InjectionZone area="contentManager.editView.right-links" slug={slug} data={data} />
                           {allowedActions.canDelete && (
                             <DeleteLink
                               isCreatingEntry={isCreatingEntry}

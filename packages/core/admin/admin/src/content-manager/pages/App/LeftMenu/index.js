@@ -66,6 +66,19 @@ const LeftMenu = () => {
         object.title.toLowerCase()
       ),
     },
+    {
+      id: 'management',
+      title: {
+        id: 'management',
+        defaultMessage: 'management',
+      },
+      searchable: true,
+      links: sortBy(matchByTitle(intlSingleTypeLinks, search), object => {
+        console.log(collectionTypeLinks, singleTypeLinks);
+
+        return object.title.toLowerCase();
+      }),
+    },
   ];
 
   const handleClear = () => {

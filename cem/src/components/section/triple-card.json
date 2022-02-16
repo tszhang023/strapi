@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_section_triple_cards",
+  "info": {
+    "displayName": "Triple Card",
+    "icon": "angle-right"
+  },
+  "options": {},
+  "attributes": {
+    "left_content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    },
+    "center_content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    },
+    "right_content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    }
+  }
+}

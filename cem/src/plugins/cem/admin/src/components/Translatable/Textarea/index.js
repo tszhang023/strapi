@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { isEmpty } from "lodash";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import "./index.css";
-import TextEditor from "../../CKEditor";
-import { Box, Stack, Typography } from "@strapi/design-system";
-import MediaLib from "../../MediaLib";
-import config from "../../../config/ckeditor";
-import { prefixFileUrlWithBackendUrl, auth } from "@strapi/helper-plugin";
-import { useIntl } from "react-intl";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import './index.css';
+import TextEditor from '../../CKEditor';
+import { Stack, Typography } from '@strapi/design-system';
+import MediaLib from '../../MediaLib';
+import config from '../../../config/ckeditor';
+import { prefixFileUrlWithBackendUrl, auth } from '@strapi/helper-plugin';
+import { useIntl } from 'react-intl';
 
 const TranslatableTextarea = ({
   description,
@@ -24,16 +24,13 @@ const TranslatableTextarea = ({
 }) => {
   const { formatMessage } = useIntl();
 
-  const [inputValue, setInputValue] = useState(value ? JSON.parse(value) : { cn: "", en: "", pt: "" });
+  const [inputValue, setInputValue] = useState(
+    value ? JSON.parse(value) : { cn: '', en: '', pt: '' }
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [editor, setEditor] = useState(null);
 
-
-  let spacer = !isEmpty(description) ? (
-    <div style={{ height: ".4rem" }} />
-  ) : (
-    <div />
-  );
+  let spacer = !isEmpty(description) ? <div style={{ height: '.4rem' }} /> : <div />;
 
   if (!isEmpty(error)) {
     spacer = <div />;
@@ -50,16 +47,14 @@ const TranslatableTextarea = ({
     onChange({ target: { name, value: newValue } });
   }, [inputValue]);
 
-  const toggleMediaLib = (editor) => {
+  const toggleMediaLib = editor => {
     if (editor) {
       setEditor(editor);
     }
-    setIsOpen((prev) => !prev);
+    setIsOpen(prev => !prev);
   };
 
-  const errorMessage = error
-    ? formatMessage({ id: error, defaultMessage: error })
-    : "";
+  const errorMessage = error ? formatMessage({ id: error, defaultMessage: error }) : '';
 
   const label = intlLabel.id
     ? formatMessage(
@@ -68,13 +63,13 @@ const TranslatableTextarea = ({
       )
     : name;
 
-  const handleChange = (data) => {
+  const handleChange = data => {
     if (data) {
-      editor.model.change((writer) => {
-        const divElement = writer.createElement("div");
-        data.forEach((file) => {
+      editor.model.change(writer => {
+        const divElement = writer.createElement('div');
+        data.forEach(file => {
           const url = prefixFileUrlWithBackendUrl(file.url);
-          const imageElement = writer.createElement("image", {
+          const imageElement = writer.createElement('image', {
             src: url,
           });
           divElement._appendChild(imageElement);
@@ -93,16 +88,15 @@ const TranslatableTextarea = ({
   config.strapiUpload = {
     uploadUrl: `${strapi.backendURL}/upload`,
     headers: {
-      Authorization: "Bearer " + auth.getToken(),
+      Authorization: 'Bearer ' + auth.getToken(),
     },
   };
-  
   const TabTitles = [];
   const LangInputSet = [
-    { title: "繁體中文", name: "cn" },
-    { title: "English", name: "en" },
-    { title: "Português", name: "pt" },
-  ].map((lang) => {
+    { title: '繁體中文', name: 'cn' },
+    { title: 'English', name: 'en' },
+    { title: 'Português', name: 'pt' },
+  ].map(lang => {
     TabTitles.push(<Tab key={lang.name}>{lang.title}</Tab>);
     return (
       <TabPanel key={lang.name}>
@@ -112,10 +106,11 @@ const TranslatableTextarea = ({
           </Typography>
         </Stack>
         <TextEditor
-          config={config}l
-          name={name + "_" + lang.name}
+          disabled={disabled}
+          config={config}
+          name={name + '_' + lang.name}
           onChange={({ target: { value } }) => {
-            setInputValue((prevState) => {
+            setInputValue(prevState => {
               const newValue = {};
               newValue[lang.name] = value;
               const newState = { ...prevState, ...newValue };
@@ -131,9 +126,9 @@ const TranslatableTextarea = ({
   return (
     <div
       style={{
-        marginBottom: "1.6rem",
-        fontSize: "0.5rem",
-        fontFamily: "Lato",
+        marginBottom: '1.6rem',
+        fontSize: '0.5rem',
+        fontFamily: 'Lato',
       }}
     >
       <Tabs>
@@ -142,11 +137,7 @@ const TranslatableTextarea = ({
       </Tabs>
       {spacer}
 
-      <MediaLib
-        onToggle={toggleMediaLib}
-        isOpen={isOpen}
-        onChange={handleChange}
-      />
+      <MediaLib onToggle={toggleMediaLib} isOpen={isOpen} onChange={handleChange} />
     </div>
   );
 };
@@ -183,6 +174,5 @@ TranslatableTextarea.propTypes = {
   }),
   value: PropTypes.string,
 };
-
 
 export default TranslatableTextarea;

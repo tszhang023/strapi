@@ -1,5 +1,5 @@
 'use strict';
-
+const _ = require('lodash');
 const { has, assoc, mapValues, prop } = require('lodash/fp');
 const { getService } = require('../utils');
 const { createModelConfigurationSchema, validateKind } = require('./validation');
@@ -23,6 +23,44 @@ module.exports = {
 
     const contentTypes = getService('content-types').findContentTypesByKind(kind);
     const { toDto } = getService('data-mapper');
+
+    try {
+
+      // const isSuperAdmin = ctx.state.user.roles.findIndex(role => role.code === 'strapi-super-admin') !== -1;
+      // if(isSuperAdmin) {
+      //   throw new Error('Super admin not activated filter');
+      // }
+
+      const {results} = await strapi.service('api::department.department').find({
+        fields: ['id', 'name'],
+        populate: {
+          menus: {
+            populate: '*'
+          },
+          staff: {
+            populate: '*'
+          }
+        }
+      });
+
+      let departmentMenu = [];
+
+      results.map(department =>
+        {
+        if (department.staff.findIndex(staff => staff.admin_user.id === ctx.state.user.id) !== -1){
+          departmentMenu = _.concat(departmentMenu, department.menus)
+        }
+      });
+
+      contentTypes.forEach(contentType => {
+        contentType.isDisplayed = false;
+        if(departmentMenu.findIndex(menu => menu.text === contentType.collectionName) !== -1) {
+          contentType.isDisplayed = true;
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
 
     ctx.body = { data: contentTypes.map(toDto) };
   },

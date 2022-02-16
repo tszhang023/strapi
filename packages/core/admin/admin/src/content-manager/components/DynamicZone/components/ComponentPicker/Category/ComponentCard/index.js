@@ -13,6 +13,7 @@ import { pxToRem } from '@strapi/helper-plugin';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import images from './images';
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   width: ${pxToRem(32)} !important;
@@ -27,13 +28,16 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 
 const ComponentBox = styled(Box)`
   flex-shrink: 0;
-  height: ${pxToRem(84)};
+  height: ${pxToRem(180)};
   border: 1px solid ${({ theme }) => theme.colors.neutral200};
   background: ${({ theme }) => theme.colors.neutral100};
   border-radius: ${({ theme }) => theme.borderRadius};
   display: flex;
   justify-content: center;
   align-items: center;
+  ${Typography} {
+    color: #00000000;
+  }
 
   &.active,
   &:hover {
@@ -48,8 +52,18 @@ const ComponentBox = styled(Box)`
     }
 
     ${Typography} {
-      color: ${({ theme }) => theme.colors.primary600};
+      color: #4945ff;
     }
+  }
+`;
+
+const StyledStack = styled(Stack)`
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+
+  &:hover {
+    backdrop-filter: blur(5px);
   }
 `;
 
@@ -61,13 +75,21 @@ function ComponentCard({ componentUid, intlLabel, icon, onClick }) {
 
   return (
     <button type="button" onClick={handleClick}>
-      <ComponentBox borderRadius="borderRadius">
-        <Stack size={1} style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <StyledFontAwesomeIcon icon={icon} />
-          <Typography variant="pi" fontWeight="bold" textColor="neutral600">
+      <ComponentBox
+        borderRadius="borderRadius"
+        style={{
+          backgroundImage: `url(${images[componentUid]})`,
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <StyledStack size={1}>
+          {/* <StyledFontAwesomeIcon icon={icon} /> */}
+          <Typography variant="pi" fontWeight="bold">
             {formatMessage(intlLabel)}
           </Typography>
-        </Stack>
+        </StyledStack>
       </ComponentBox>
     </button>
   );

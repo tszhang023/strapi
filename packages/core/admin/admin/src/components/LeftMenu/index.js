@@ -83,9 +83,9 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
   return (
     <MainNav condensed={condensed}>
       <NavBrand
-        workplace="Workplace"
-        title="Strapi Dashboard"
-        icon={<img src={menuLogo} alt="Strapi Dashboard" />}
+        workplace="CMS system"
+        title="CEM OFFICIAL WEB"
+        icon={<img src={menuLogo} alt="CMS Dashboard" />}
       />
 
       <Divider />

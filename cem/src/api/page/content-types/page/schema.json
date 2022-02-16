@@ -26,6 +26,14 @@
       "type": "string",
       "configurable": false
     },
+    "scheduleArchiveDate": {
+      "type": "string",
+      "configurable": false
+    },
+    "archivedDate": {
+      "type": "string",
+      "configurable": false
+    },
     "rejectMessage": {
       "type": "string",
       "configurable": false
@@ -33,24 +41,28 @@
     "content": {
       "type": "dynamiczone",
       "components": [
-        "section.banner",
-        "section.news",
-        "section.carousel"
+        "section.single-card",
+        "section.styled-card",
+        "section.triple-card",
+        "section.double-card"
       ]
     },
     "title": {
       "type": "string",
       "fieldComponent": "TranslatableText"
     },
-    "description": {
-      "type": "richtext",
-      "fieldComponent": "TranslatableTextarea"
-    },
-    "Simple_text": {
-      "type": "string"
+    "banner": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
     },
     "name": {
-      "type": "date"
+      "type": "string"
     }
   }
 }

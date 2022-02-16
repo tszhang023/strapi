@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_section_styled_cards",
+  "info": {
+    "displayName": "Styled Card",
+    "icon": "angle-right",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    },
+    "images": {
+      "allowedTypes": ["images", "files", "videos"],
+      "type": "media",
+      "multiple": true
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "apps": [{
+      "name": "cem dev admin",
+      "script": "yarn --cwd cem develop --watch-admin"
+  }, {
+      "name": "core admin",
+      "script": "yarn --cwd packages/core/admin/admin develop"
+  }]
+}

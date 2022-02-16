@@ -322,4 +322,4 @@ cem/.cache/ee/admin/pages/SettingsPage/pages/Roles/CreatePage/tests/index.test.j
 cem/.cache/ee/admin/pages/SettingsPage/pages/Roles/CreatePage/tests/__snapshots__/index.test.js.snap
 cem/.cache/ee/admin/pages/SettingsPage/pages/Roles/ListPage/tests/index.test.js
 cem/.cache/ee/admin/pages/SettingsPage/pages/Roles/ListPage/tests/reducer.test.js
-cem/.cache/*
+cem/.cache

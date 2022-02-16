@@ -7,16 +7,13 @@
     "displayName": "route"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "route": {
       "type": "dynamiczone",
-      "components": [
-        "site.page",
-        "site.path"
-      ]
+      "components": ["site.page", "site.path"]
     },
     "page": {
       "type": "relation",

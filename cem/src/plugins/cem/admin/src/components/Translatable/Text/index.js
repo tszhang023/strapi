@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { isEmpty } from "lodash";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 import { TextInput } from '@strapi/design-system/TextInput';
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import "./index.css";
-import { useIntl } from "react-intl";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import './index.css';
+import { useIntl } from 'react-intl';
 
 const TranslatableText = ({
   description,
@@ -19,13 +19,11 @@ const TranslatableText = ({
   value,
 }) => {
   const { formatMessage } = useIntl();
-  const [inputValue, setInputValue] = useState(value ? JSON.parse(value) : { cn: "", en: "", pt: "" });
-
-  let spacer = !isEmpty(description) ? (
-    <div style={{ height: ".4rem" }} />
-  ) : (
-    <div />
+  const [inputValue, setInputValue] = useState(
+    value ? JSON.parse(value) : { cn: '', en: '', pt: '' }
   );
+
+  let spacer = !isEmpty(description) ? <div style={{ height: '.4rem' }} /> : <div />;
 
   if (!isEmpty(error)) {
     spacer = <div />;
@@ -33,25 +31,24 @@ const TranslatableText = ({
 
   useEffect(() => {
     const newValue = JSON.stringify(inputValue);
-    if(newValue) {
-      onChange({ target: { name, value:  newValue, type: 'string'} })
+    if (newValue) {
+      onChange({ target: { name, value: newValue, type: 'string' } });
     }
   }, [inputValue]);
 
   const label = intlLabel.id
-  ? formatMessage(
-      { id: intlLabel.id, defaultMessage: intlLabel.defaultMessage },
-      { ...intlLabel.values }
-    )
-  : name;
-
+    ? formatMessage(
+        { id: intlLabel.id, defaultMessage: intlLabel.defaultMessage },
+        { ...intlLabel.values }
+      )
+    : name;
 
   const TabTitles = [];
   const LangInputSet = [
-    { title: "繁體中文", name: "cn" },
-    { title: "English", name: "en" },
-    { title: "Português", name: "pt" },
-  ].map((lang) => {
+    { title: '繁體中文', name: 'cn' },
+    { title: 'English', name: 'en' },
+    { title: 'Português', name: 'pt' },
+  ].map(lang => {
     TabTitles.push(<Tab key={lang.name}>{lang.title}</Tab>);
     return (
       <TabPanel key={lang.name}>
@@ -59,7 +56,7 @@ const TranslatableText = ({
           error={error}
           value={inputValue[lang.name]}
           onChange={({ target: { value } }) => {
-            setInputValue((prevState) => {
+            setInputValue(prevState => {
               const newValue = {};
               newValue[lang.name] = value;
               const newState = { ...prevState, ...newValue };
@@ -69,6 +66,7 @@ const TranslatableText = ({
           label={label}
           placeholder={intlLabel.placeholder}
           name={label}
+          disabled={disabled}
           required
         />
       </TabPanel>
@@ -78,9 +76,9 @@ const TranslatableText = ({
   return (
     <div
       style={{
-        marginBottom: "1.6rem",
-        fontSize: "0.5rem",
-        fontFamily: "Lato",
+        marginBottom: '1.6rem',
+        fontSize: '0.5rem',
+        fontFamily: 'Lato',
       }}
     >
       <Tabs>

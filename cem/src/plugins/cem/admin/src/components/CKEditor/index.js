@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "ckeditor5-build-strapi-wysiwyg";
+import ClassicEditor from "../../../../ckeditor5-build-strapi-wysiwyg-main/build/ckeditor.js";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Editor = ({ onChange, name, value, config }) => {
+const Editor = ({ onChange, name, value, config, disabled}) => {
   return (
     <Wrapper>
       <CKEditor
@@ -41,6 +41,7 @@ const Editor = ({ onChange, name, value, config }) => {
           const data = editor.getData();
           onChange({ target: { name, value: data } });
         }}
+        disabled={disabled}
         config={config}
       />
     </Wrapper>
@@ -51,6 +52,7 @@ Editor.propTypes = {
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default Editor;

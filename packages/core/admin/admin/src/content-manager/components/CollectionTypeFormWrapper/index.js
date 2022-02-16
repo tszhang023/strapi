@@ -303,6 +303,7 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
   const onPut = useCallback(
     async (body, trackerProperty) => {
+      console.log(body, trackerProperty)
       const endPoint = getRequestUrl(`collection-types/${slug}/${id}`);
 
       try {

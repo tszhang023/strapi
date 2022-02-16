@@ -16,3 +16,121 @@
   margin-bottom: 0;
   border-bottom: 0;
 }
+
+.multi-column {
+  padding: 10px 0;
+  margin: 1rem 0;
+
+  background: rgba(0, 0, 0, 0.1);
+  border: solid 1px hsl(0, 0%, 77%);
+  border-radius: 2px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.multi-column-left,
+.multi-column-right {
+  width: 50%;
+  background: #FFF;
+  border: solid 1px hsl(0, 2%, 38%);
+}
+
+.multi-column p {
+  margin: 0
+}
+
+.cem-button {
+  margin: 5px;
+  padding: 5px 20px;
+  border-radius: 50px 20px;
+  text-decoration: unset;
+  display: inline-block;
+}
+
+.btn-primary {
+  color: #FFFFFF;
+  border: solid 1px hsl(0, 2%, 38%);
+  background-color: #000000;
+}
+
+.btn-secondary {
+  color: #161616;
+  border: solid 1px hsl(0, 2%, 38%);
+  background-color: #FFEBB3;
+}
+
+.btn-tertiary {
+  color: #161616;
+  border: solid 1px hsl(0, 2%, 38%);
+  background-color: #FFEBB3;
+}
+
+.btn-outline {
+  color: #161616;
+  border: solid 1px hsl(0, 2%, 38%);
+}
+
+.table {
+  margin: 0;
+  width: 100%;
+}
+
+.ck h1 {
+  display: block !important;
+  font-size: 2rem !important;
+  margin-top: 0.67rem !important;
+  margin-bottom: 0.67rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-weight: bold !important;
+}
+
+.ck h2 {
+  display: block !important;
+  font-size: 1.5rem !important;
+  margin-top: 0.83rem !important;
+  margin-bottom: 0.83rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-weight: bold !important;
+}
+
+.ck h3 {
+  display: block !important;
+  font-size: 1.17rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-weight: bold !important;
+}
+
+.ck h4 {
+  display: block !important;
+  font-size: 1rem !important;
+  margin-top: 1.33rem !important;
+  margin-bottom: 1.33rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-weight: bold !important;
+}
+
+.ck h5 {
+  display: block !important;
+  font-size: .83rem !important;
+  margin-top: 1.67rem !important;
+  margin-bottom: 1.67rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-weight: bold !important;
+}
+
+.ck h6 {
+  display: block !important;
+  font-size: .67rem !important;
+  margin-top: 2.33rem !important;
+  margin-bottom: 2.33rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-weight: bold !important;
+}

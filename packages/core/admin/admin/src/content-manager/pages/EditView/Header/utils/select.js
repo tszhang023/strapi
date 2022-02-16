@@ -11,6 +11,7 @@ function useSelect() {
     hasDraftAndPublish,
     modifiedData,
     onPublish,
+    onPut,
     onUnpublish,
   } = useCMEditViewDataManager();
 
@@ -23,6 +24,7 @@ function useSelect() {
     layout,
     hasDraftAndPublish,
     modifiedData,
+    onPut,
     onPublish,
     onUnpublish,
   };

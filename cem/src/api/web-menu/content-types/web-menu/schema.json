@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "web_menus",
+  "info": {
+    "singularName": "web-menu",
+    "pluralName": "web-menus",
+    "displayName": "web-menu",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Empty",
+        "Outer_link",
+        "Page"
+      ],
+      "default": "Empty"
+    },
+    "url": {
+      "type": "string"
+    },
+    "parent": {
+      "type": "integer"
+    },
+    "page": {
+      "type": "integer"
+    }
+  }
+}

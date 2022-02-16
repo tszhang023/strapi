@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_section_single_cards",
+  "info": {
+    "displayName": "Single Card",
+    "icon": "angle-right"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
+    }
+  }
+}

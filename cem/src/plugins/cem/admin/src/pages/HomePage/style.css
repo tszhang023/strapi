@@ -1,0 +1,91 @@
+/* .MuiTreeNode-node {
+  display: flex;
+  margin: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  height: 40px;
+  align-items: center;
+  font-weight: 500;
+  padding: 0 20px;
+  margin: 6px;
+}
+
+.MuiNodeContent-rowLabel {
+  height: 20px;
+} */
+
+.title {
+  padding: 20px 10px;
+  font-size: 24px;
+  font-weight: 700;
+  justify-self: flex-start;
+  flex-grow: 1;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  width: 60vw;
+}
+
+.action-bar .action-button {
+  width: 100px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+  transition: 0.3s;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.action-bar .action-button:last-child {
+  background-color: #ffebb3;
+}
+
+.rst__rowContents {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50vw;
+  box-shadow: 1px 6px 8px 0 rgb(0 0 0 / 40%);
+  min-height: 40px;
+  padding: 0 0 0 20px;
+  border-radius: 5px;
+  background-color: rgb(255, 252, 232);
+}
+
+.rst__nodeContent div {
+  align-items: center;
+}
+
+.rst__nodeContent > div > div:not(:last-child) {
+  display: none;
+}
+
+.rst__rowToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-container {
+  height: calc(100vh - 80px);
+}
+
+.rst__node {
+  display: flex;
+}
+
+.rst__tree {
+  padding-top: 10px;
+}
+
+/* .modify {
+  border: outset 1px gold;
+  box-sizing: border-box;
+} */
+
+/* .rst__lineBlock: {
+  border-right: 1px dotted #ccc;
+} */

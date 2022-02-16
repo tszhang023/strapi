@@ -1,4 +1,7 @@
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useRef, useState, forwardRef } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Checkbox } from '@strapi/design-system/Checkbox';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import get from 'lodash/get';
@@ -29,6 +32,7 @@ const Header = ({
   hasDraftAndPublish,
   layout,
   modifiedData,
+  onPut,
   onPublish,
   onUnpublish,
   status,
@@ -36,6 +40,14 @@ const Header = ({
   const { goBack } = useHistory();
   const [showWarningUnpublish, setWarningUnpublish] = useState(false);
   const [showWarningDraftRelation, setShowWarningDraftRelation] = useState(false);
+  const [showTimeSelectPublish, setShowTimeSelectPublish] = useState(false);
+  const [showRejectMessageInput, setShowRejectMessageInput] = useState(false);
+  const [showSubmitConfirmation, setShowSubmitConfirmation] = useState(false);
+  const [showTimeSelectArchive, setShowTimeSelectArchive] = useState(false);
+  const [autoArchive, setAutoArchive] = useState(false);
+  const [publishDateTime, setPublishDateTime] = useState(new Date());
+  const [archiveDateTime, setArchiveDateTime] = useState(new Date());
+  const [rejectMessage, setRejectMessage] = useState(initialData.rejectMessage ?? '');
   const { formatMessage } = useIntl();
   const draftRelationsCountRef = useRef(0);
 
@@ -67,17 +79,67 @@ const Header = ({
     return count;
   };
 
+  const changeStage = stage => {
+    switch (stage) {
+      case 'publish':
+        onPut(
+          {
+            ...initialData,
+            stage,
+            publishDate: null,
+            schedulePublishDate: Math.floor(publishDateTime.getTime() / 1000).toString(),
+            scheduleArchiveDate: autoArchive
+              ? Math.floor(archiveDateTime.getTime() / 1000).toString()
+              : null,
+          },
+          {}
+        );
+        break;
+      case 'submitted':
+        onPut({ ...initialData, stage, schedulePublishDate: null }, {});
+        break;
+      case 'reject':
+        onPut({ ...initialData, stage: 'draft', rejectMessage }, {});
+        break;
+      case 'archive':
+        onPut(
+          {
+            ...initialData,
+            scheduleArchiveDate: Math.floor(archiveDateTime.getTime() / 1000).toString(),
+          },
+          {}
+        );
+        break;
+      case 'cancle-archive':
+        onPut(
+          {
+            ...initialData,
+            scheduleArchiveDate: null,
+          },
+          {}
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
   let primaryAction = null;
 
   if (isCreatingEntry && canCreate) {
     primaryAction = (
       <Stack horizontal size={2}>
-        {hasDraftAndPublish && (
+        {/* {hasDraftAndPublish && (
           <Button disabled startIcon={<Check />} variant="secondary">
             {formatMessage({ id: 'app.utils.publish', defaultMessage: 'Publish' })}
           </Button>
-        )}
-        <Button disabled={!didChangeData} isLoading={status === 'submit-pending'} type="submit">
+        )} */}
+        <Button
+          variant="success-light"
+          disabled={!didChangeData}
+          isLoading={status === 'submit-pending'}
+          type="submit"
+        >
           {formatMessage({
             id: getTrad('containers.Edit.submit'),
             defaultMessage: 'Save',
@@ -96,22 +158,114 @@ const Header = ({
     const pubishButtonLabel = isPublished
       ? { id: 'app.utils.unpublish', defaultMessage: 'Unpublish' }
       : { id: 'app.utils.publish', defaultMessage: 'Publish' };
+    // /* eslint-disable indent */
+    // const onClick = isPublished
+    //   ? () => setWarningUnpublish(true)
+    //   : () => {
+    //       if (checkIfHasDraftRelations() === 0) {
+    //         onPublish();
+    //       } else {
+    //         setShowWarningDraftRelation(true);
+    //       }
+    //     };
+    // /* eslint-enable indent */
 
-    /* eslint-disable indent */
-    const onClick = isPublished
-      ? () => setWarningUnpublish(true)
-      : () => {
-          if (checkIfHasDraftRelations() === 0) {
-            onPublish();
-          } else {
-            setShowWarningDraftRelation(true);
-          }
-        };
-    /* eslint-enable indent */
+    // ["default","tertiary","secondary","danger","success","ghost","success-light","danger-light"].
 
     primaryAction = (
       <Flex>
-        {shouldShowPublishButton && (
+        {(!initialData.stage ||
+          initialData?.stage === 'draft' ||
+          initialData?.stage === 'published') && (
+          <Box paddingLeft={2}>
+            <Button
+              variant="success-light"
+              disabled={!didChangeData}
+              loading={status === 'submit-pending'}
+              onClick={() => onPut({ ...modifiedData, stage: 'draft' }, {})}
+            >
+              {formatMessage({
+                id: getTrad('containers.Edit.submit'),
+                defaultMessage: 'Save',
+              })}
+            </Button>
+          </Box>
+        )}
+        {initialData?.stage === 'draft' && (
+          <Box paddingLeft={2}>
+            <Button
+              variant="secondary"
+              disabled={didChangeData}
+              loading={status === 'submit-pending'}
+              onClick={() => setShowSubmitConfirmation(true)}
+            >
+              Submit
+            </Button>
+          </Box>
+        )}
+        {initialData?.stage === 'submitted' && (
+          <Box paddingLeft={2}>
+            <Button
+              variant="danger-light"
+              disabled={didChangeData}
+              loading={status === 'submit-pending'}
+              onClick={() => setShowRejectMessageInput(true)}
+            >
+              Reject
+            </Button>
+          </Box>
+        )}
+        {initialData?.stage === 'submitted' && (
+          <Box paddingLeft={2}>
+            <Button
+              variant="success"
+              disabled={didChangeData}
+              loading={status === 'submit-pending'}
+              onClick={() => setShowTimeSelectPublish(true)}
+            >
+              Publish
+            </Button>
+          </Box>
+        )}
+        {initialData?.stage === 'publish' && (
+          <Box paddingLeft={2}>
+            <Button
+              variant="danger-light"
+              disabled={didChangeData}
+              loading={status === 'submit-pending'}
+              onClick={() => changeStage('submitted')}
+            >
+              Cancel Publis Schedule
+            </Button>
+          </Box>
+        )}
+        {initialData?.publishedDate &&
+          !initialData?.scheduleArchiveDate &&
+          !initialData?.archivedDate && (
+            <Box paddingLeft={2}>
+              <Button
+                variant="danger-light"
+                disabled={didChangeData}
+                loading={status === 'submit-pending'}
+                onClick={() => setShowTimeSelectArchive(true)}
+              >
+                Archive
+              </Button>
+            </Box>
+          )}
+        {initialData?.scheduleArchiveDate && !initialData?.archivedDate && (
+          <Box paddingLeft={2}>
+            <Button
+              variant="danger-light"
+              disabled={didChangeData}
+              loading={status === 'submit-pending'}
+              onClick={() => changeStage('cancle-archive')}
+            >
+              Cancel Archive Schedule
+            </Button>
+          </Box>
+        )}
+        {/* {shouldShowPublishButton && (
           <Button
             disabled={didChangeData}
             loading={isPublishButtonLoading}
@@ -121,21 +275,17 @@ const Header = ({
           >
             {formatMessage(pubishButtonLabel)}
           </Button>
-        )}
-        <Box paddingLeft={shouldShowPublishButton ? 2 : 0}>
-          <Button disabled={!didChangeData} loading={status === 'submit-pending'} type="submit">
-            {formatMessage({
-              id: getTrad('containers.Edit.submit'),
-              defaultMessage: 'Save',
-            })}
-          </Button>
-        </Box>
+        )} */}
       </Flex>
     );
   }
 
   const toggleWarningUnpublish = () => setWarningUnpublish(prevState => !prevState);
   const toggleWarningDraftRelation = () => setShowWarningDraftRelation(prevState => !prevState);
+  const toggleTimeSelectPublish = () => setShowTimeSelectPublish(prevState => !prevState);
+  const toggleRejectMessageInput = () => setShowRejectMessageInput(prevState => !prevState);
+  const toggleSubmitConfirmation = () => setShowSubmitConfirmation(prevState => !prevState);
+  const toggleTimeSelectArchive = () => setShowTimeSelectArchive(prevState => !prevState);
 
   const handlePublish = () => {
     toggleWarningDraftRelation();
@@ -152,6 +302,14 @@ const Header = ({
     id: getTrad('api.id'),
     defaultMessage: 'API ID ',
   })} : ${layout.apiID}`;
+
+  // eslint-disable-next-line react/prop-types
+  const DateTimeBtn = forwardRef(({ value, onClick }, ref) => (
+    // eslint-disable-next-line react/button-has-type
+    <Button style={{ margin: 'auto' }} variant="tertiary" onClick={onClick} ref={ref}>
+      {value}
+    </Button>
+  ));
 
   return (
     <>
@@ -233,6 +391,218 @@ const Header = ({
         </Dialog>
       )}
 
+      {showTimeSelectPublish && (
+        <Dialog
+          onClose={toggleTimeSelectPublish}
+          title="Public Schedule"
+          labelledBy="confirmation"
+          describedBy="confirm-description"
+          isOpen={showTimeSelectPublish}
+        >
+          <DialogBody icon={<ExclamationMarkCircle />}>
+            <Stack size={2}>
+              <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                <Typography id="confirm-description">
+                  Select publish time <br /> Planning can cancel while waiting for publish.
+                </Typography>
+              </Flex>
+              <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                <DatePicker
+                  selected={publishDateTime}
+                  onChange={date => setPublishDateTime(date)}
+                  showTimeSelect
+                  minDate={new Date()}
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  timeCaption="time"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  customInput={<DateTimeBtn />}
+                />
+              </Flex>
+              <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                <Checkbox
+                  onValueChange={() => setAutoArchive(!autoArchive)}
+                  value={autoArchive}
+                  aria-label="Set end time"
+                  name="Set end time"
+                >
+                  {autoArchive ? 'TO ↓' : 'Set end time'}
+                </Checkbox>
+              </Flex>
+              {autoArchive && (
+                <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                  <DatePicker
+                    selected={archiveDateTime}
+                    onChange={date => setArchiveDateTime(date)}
+                    minDate={publishDateTime}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    customInput={<DateTimeBtn />}
+                  />
+                </Flex>
+              )}
+            </Stack>
+          </DialogBody>
+          <DialogFooter
+            startAction={
+              <Button onClick={toggleTimeSelectPublish} variant="tertiary">
+                Cancel
+              </Button>
+            }
+            endAction={
+              <Button
+                variant="success-light"
+                onClick={() => {
+                  changeStage('publish');
+                  toggleTimeSelectPublish();
+                }}
+              >
+                Publish
+              </Button>
+            }
+          />
+          x
+        </Dialog>
+      )}
+
+      {showTimeSelectArchive && (
+        <Dialog
+          onClose={toggleTimeSelectArchive}
+          title="Archive Schedule"
+          labelledBy="confirmation"
+          describedBy="confirm-description"
+          isOpen={showTimeSelectArchive}
+        >
+          <DialogBody icon={<ExclamationMarkCircle />}>
+            <Stack size={2}>
+              <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                <Typography id="confirm-description">
+                  Select archive time <br /> Planning can cancel before archived.
+                </Typography>
+              </Flex>
+              <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                <DatePicker
+                  selected={archiveDateTime}
+                  onChange={date => setArchiveDateTime(date)}
+                  showTimeSelect
+                  minDate={new Date()}
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  timeCaption="time"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  customInput={<DateTimeBtn />}
+                />
+              </Flex>
+            </Stack>
+          </DialogBody>
+          <DialogFooter
+            startAction={
+              <Button onClick={toggleTimeSelectArchive} variant="tertiary">
+                Cancel
+              </Button>
+            }
+            endAction={
+              <Button
+                variant="success-light"
+                onClick={() => {
+                  changeStage('archive');
+                  toggleTimeSelectArchive();
+                }}
+              >
+                Archive
+              </Button>
+            }
+          />
+        </Dialog>
+      )}
+
+      {showRejectMessageInput && (
+        <Dialog
+          onClose={toggleRejectMessageInput}
+          title="Reject"
+          labelledBy="confirmation"
+          describedBy="confirm-description"
+          isOpen={showRejectMessageInput}
+        >
+          <DialogBody>
+            <Stack size={2}>
+              <Flex justifyContent="start" style={{ textAlign: 'left' }}>
+                Message:
+              </Flex>
+              <Flex
+                justifyContent="center"
+                style={{ textAlign: 'center' }}
+                onChange={event => setRejectMessage(event.target.value)}
+              >
+                <textarea
+                  value={rejectMessage}
+                  style={{ resize: 'none', whiteSpace: 'pre-wrap' }}
+                  rows="8"
+                  cols="50"
+                />
+              </Flex>
+            </Stack>
+          </DialogBody>
+          <DialogFooter
+            startAction={
+              <Button onClick={toggleRejectMessageInput} variant="tertiary">
+                Cancel
+              </Button>
+            }
+            endAction={
+              <Button
+                variant="danger-light"
+                onClick={() => {
+                  changeStage('reject');
+                  toggleRejectMessageInput();
+                }}
+              >
+                Reject
+              </Button>
+            }
+          />
+        </Dialog>
+      )}
+
+      {showSubmitConfirmation && (
+        <Dialog
+          onClose={toggleSubmitConfirmation}
+          title="Submit"
+          labelledBy="confirmation"
+          describedBy="confirm-description"
+          isOpen={showSubmitConfirmation}
+        >
+          <DialogBody>
+            <Stack size={2}>
+              <Flex justifyContent="center" style={{ textAlign: 'center' }}>
+                Submit for approvement?
+              </Flex>
+            </Stack>
+          </DialogBody>
+          <DialogFooter
+            startAction={
+              <Button onClick={toggleSubmitConfirmation} variant="tertiary">
+                Cancel
+              </Button>
+            }
+            endAction={
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  changeStage('submitted');
+                  toggleSubmitConfirmation();
+                }}
+              >
+                Submit
+              </Button>
+            }
+          />
+        </Dialog>
+      )}
+
       {showWarningDraftRelation && (
         <Dialog
           onClose={toggleWarningDraftRelation}
@@ -308,14 +678,12 @@ Header.propTypes = {
   layout: PropTypes.object.isRequired,
   hasDraftAndPublish: PropTypes.bool.isRequired,
   modifiedData: PropTypes.object.isRequired,
+  onPut: PropTypes.func.isRequired,
   onPublish: PropTypes.func.isRequired,
   onUnpublish: PropTypes.func.isRequired,
 };
 
 const Memoized = memo(Header, isEqualFastCompare);
 
-export default connect(
-  Memoized,
-  select
-);
+export default connect(Memoized, select);
 export { Header };

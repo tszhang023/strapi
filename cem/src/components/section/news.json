@@ -2,19 +2,14 @@
   "collectionName": "components_news_news",
   "info": {
     "displayName": "news",
-    "icon": "align-left",
+    "icon": "angle-right",
     "description": ""
   },
   "options": {},
   "attributes": {
-    "title": {
-      "type": "string"
-    },
     "content": {
-      "type": "richtext"
-    },
-    "ffff": {
-      "type": "string"
+      "type": "richtext",
+      "fieldComponent": "TranslatableTextarea"
     }
   }
 }

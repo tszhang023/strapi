@@ -1,12 +1,18 @@
 import React from "react";
 import { BaseButton } from '@strapi/design-system/BaseButton';
 import styled from 'styled-components';
+import { Typography } from '@strapi/design-system/Typography';
 
 const StyledButton = styled(BaseButton)`
 width: 30%;
 display: block;
 font-size: 12px;
 font-weight: 600;
+
+}
+&:hover {
+  background-color: #f5f5f5;
+}
 `;
 
 const StyledDiv = styled.div`
